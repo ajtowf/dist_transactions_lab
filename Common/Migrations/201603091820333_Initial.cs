@@ -1,6 +1,6 @@
 using System.Data.Entity.Migrations;
 
-namespace ApplicationService.Migrations
+namespace Common.Migrations
 {
     public partial class Initial : DbMigration
     {

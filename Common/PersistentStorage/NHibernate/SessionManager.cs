@@ -3,7 +3,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 
-namespace ApplicationService.PersistentStorage.NHibernate
+namespace Common.PersistentStorage.NHibernate
 {
     public static class SessionManager
     {
@@ -38,7 +38,7 @@ namespace ApplicationService.PersistentStorage.NHibernate
             return Fluently.Configure()
                 .Database(
                     MsSqlConfiguration.MsSql2008
-                        //.ShowSql()
+                        .ShowSql()
                         .ConnectionString(@"server=.\;database=disttranslab;integrated security=true"))
                 .Mappings(x => x.FluentMappings
                     .AddFromAssemblyOf<NHibernateImpl>()

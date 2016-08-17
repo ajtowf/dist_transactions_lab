@@ -1,7 +1,7 @@
 ﻿using Common.Entities;
 using FluentNHibernate.Mapping;
 
-namespace ApplicationService.PersistentStorage.NHibernate
+namespace Common.PersistentStorage.NHibernate
 {
     public class ItemMap : ClassMap<Item>
     {

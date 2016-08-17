@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using Common.Entities;
 
-namespace ApplicationService.PersistentStorage.EntityFramework
+namespace Common.PersistentStorage.EntityFramework
 {
     public class AppDbContext : DbContext
     {

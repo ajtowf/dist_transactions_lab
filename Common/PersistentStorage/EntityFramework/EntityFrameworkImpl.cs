@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Common.Entities;
+using System.Threading;
 
-namespace ApplicationService.PersistentStorage.EntityFramework
+namespace Common.PersistentStorage.EntityFramework
 {
     public class EntityFrameworkImpl : IDbAbstraction
     {
@@ -10,8 +11,10 @@ namespace ApplicationService.PersistentStorage.EntityFramework
         {
             IList<Item> items;
             using (var db = new AppDbContext())
+            using(var transaction = db.Database.BeginTransaction())
             {
                 items = db.Items.ToList();
+                transaction.Commit();
             }
 
             return items;
@@ -20,9 +23,12 @@ namespace ApplicationService.PersistentStorage.EntityFramework
         public Item Write(Item item)
         {
             using (var db = new AppDbContext())
+            using (var transaction = db.Database.BeginTransaction())
             {
                 item = db.Items.Add(item);
                 db.SaveChanges();
+                Thread.Sleep(25 * 1000);
+                transaction.Commit();
             }
 
             return item;

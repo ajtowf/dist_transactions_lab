@@ -64,6 +64,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -83,30 +84,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ReadService.svc" />
     <Content Include="AppService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201603091820333_Initial.cs" />
-    <Compile Include="Migrations\201603091820333_Initial.Designer.cs">
-      <DependentUpon>201603091820333_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="PersistentStorage\EntityFramework\EntityFrameworkImpl.cs" />
-    <Compile Include="PersistentStorage\IDbAbstraction.cs" />
-    <Compile Include="PersistentStorage\NHibernate\ItemMap.cs" />
-    <Compile Include="PersistentStorage\NHibernate\NHibernateImpl.cs" />
-    <Compile Include="PersistentStorage\NHibernate\SessionManager.cs" />
-    <Compile Include="ReadService.svc.cs">
-      <DependentUpon>ReadService.svc</DependentUpon>
-    </Compile>
     <Compile Include="AppService.svc.cs">
       <DependentUpon>AppService.svc</DependentUpon>
     </Compile>
-    <Compile Include="PersistentStorage\EntityFramework\AppDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,11 +109,6 @@
       <Project>{923CA05D-9F48-474F-BF5A-3B683F89DC73}</Project>
       <Name>Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603091820333_Initial.resx">
-      <DependentUpon>201603091820333_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,18 +1,19 @@
-﻿using System.ServiceModel;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
+using Common.Entities;
 
 namespace Common
 {
     public class AppServiceClient : ClientBase<IAppService>, IAppService
     {
-        public Task CallAsync()
+        public IEnumerable<Item> Read(bool useEntityFramework = true)
         {
-            return Channel.CallAsync();
+            return Channel.Read(useEntityFramework);
         }
 
-        public Task WriteAsync()
+        public void Write(bool useEntityFramework = true)
         {
-            return Channel.WriteAsync();
-        }
+            Channel.Write(useEntityFramework);
+        }        
     }
 }

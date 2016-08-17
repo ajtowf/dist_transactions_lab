@@ -1,57 +1,37 @@
-﻿using System;
-using System.ServiceModel;
-using System.Threading.Tasks;
+﻿using System.ServiceModel;
 using System.Transactions;
-using ApplicationService.PersistentStorage;
-using ApplicationService.PersistentStorage.EntityFramework;
-using ApplicationService.PersistentStorage.NHibernate;
+using Common.PersistentStorage.NHibernate;
 using Common;
 using Common.Entities;
+using System.Collections.Generic;
+using Common.PersistentStorage;
+using Common.PersistentStorage.EntityFramework;
 
 namespace ApplicationService
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true)]    
     public class AppService : IAppService
     {
-        private readonly AppServiceClient _service;
-        private readonly IDbAbstraction _db;
-
-        public AppService()
-        {
-            _service = new AppServiceClient();
-            _db = new EntityFrameworkImpl();
-        }
+        private readonly IDbAbstraction _nh = new NHibernateImpl();
+        private readonly IDbAbstraction _ef = new EntityFrameworkImpl();
 
         [OperationBehavior(TransactionScopeRequired = true)]
-        public async Task CallAsync()
+        public void Write(bool useEntityFramework = true)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (var scope = new TransactionScope(TransactionScopeOption.Required))
             {
-                await _service.WriteAsync();                
+                if (useEntityFramework)
+                    _ef.Write(Item.Create);
+                else
+                    _nh.Write(Item.Create);
+                
                 scope.Complete();
             }
         }
-        
-        [OperationBehavior(TransactionScopeRequired = true)]
-        public Task WriteAsync()
-        {
-            //await WriteWithHibernateData();
-            return Task.FromResult(_db.Write(Item.Create));
-        }
 
-        private static async Task WriteWithHibernateData()
+        public IEnumerable<Item> Read(bool useEntityFramework = true)
         {
-            using (var session = SessionManager.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    session.SaveOrUpdate(Item.Create);
-                    await Task.Delay(100);
-                }
-
-                transaction.Commit();
-            }
+            return useEntityFramework ? _ef.GetAll() : _nh.GetAll();            
         }
     }
 }

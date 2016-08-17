@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Common.Entities;
 
-namespace ApplicationService.PersistentStorage
+namespace Common.PersistentStorage
 {
     public interface IDbAbstraction
     {

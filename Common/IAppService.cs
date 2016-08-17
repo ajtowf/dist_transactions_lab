@@ -1,15 +1,17 @@
-﻿using System.ServiceModel;
-using System.Threading.Tasks;
+﻿using Common.Entities;
+using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace Common
 {
     [ServiceContract]
     public interface IAppService
     {
-        [OperationContract, TransactionFlow(TransactionFlowOption.Allowed)]
-        Task CallAsync();
+        [OperationContract]
+        [TransactionFlow(TransactionFlowOption.Mandatory)]
+        void Write(bool useEntityFramework = true);
 
-        [OperationContract, TransactionFlow(TransactionFlowOption.Allowed)]
-        Task WriteAsync();        
+        [OperationContract]        
+        IEnumerable<Item> Read(bool useEntityFramework = true);
     }
 }
