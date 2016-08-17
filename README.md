@@ -1,13 +1,18 @@
-# Distributed transactions in WCF with async/await
+# Distributed transactions in WCF
 
-Solution to test how distributed transactions behave in WCF with async await keywords, see [blog post here](http://www.towfeek.se/2016/03/connection-leaks-when-using-asyncawait-with-transactions-in-wcf/)
+Reproduces problem with timed out SQL connections when using DTC. Examples with both EntityFramework and NHibernate.
 
 ## Install
 
 * Open solution as administrator with elevated permissions, required since we're hosting the WCF services in IIS.
-* Run "Update-Database" from the Package Manager Console
-* Press F5 to run
+* Run "Update-Database" from the Package Manager Console, Target the Common project because it contains the migration schema.
+* Set ClientProgram as Startup and Press F5 to run.
 
-## NHibernate or EntityFramework
+## Reproduce with NHibernate
 
-You can easily switch between these OR-mappers by changing witch implementation of IDbAbstraction to use in the service implementation, [see my screencast](https://www.youtube.com/watch?v=PHLyJSOQmJA) to see how this is done.
+Press numpad 1 (causes timeout)
+Press numpad 1 again (causes a second timeout)
+Press numpad 1 again (now we get an exception at session.BeginTransaction())
+
+From this point on all clients that call session.BeginTransaction() will fail, meaning even clients that only want to read data (numpad2).
+
