@@ -24,32 +24,40 @@ namespace Common.PersistentStorage.NHibernate
 
         public Item Write(Item item)
         {
-            if (System.Transactions.Transaction.Current.TransactionInformation.Status == System.Transactions.TransactionStatus.Aborted)
-            {
-                System.Transactions.Transaction.Current.Dispose();
-                System.Transactions.Transaction.Current = null;
-            }
-
             using (var session = SessionManager.OpenSession())
             using (var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                try
-                {
-                    session.SaveOrUpdate(item);
-                    Thread.Sleep(25 * 1000);
-                    transaction.Commit();
-                }
-                catch (Exception e)
-                {
-                    if (session.Transaction.IsActive)
-                        session.Transaction.Rollback();
-                    
-                    // Detta orsakar fel!!!!!!!!!! Rollback på session.Transaction istället!
-                    //if (transaction.IsActive)
-                    //    transaction.Rollback();
+                session.SaveOrUpdate(item);
+                Thread.Sleep(25 * 1000);
+                transaction.Commit();
 
-                    throw;
-                }
+                ////try
+                ////{
+                ////    session.SaveOrUpdate(item);
+                ////    Thread.Sleep(25 * 1000);
+                ////    transaction.Commit();
+                ////    //if (System.Transactions.Transaction.Current.TransactionInformation.Status == System.Transactions.TransactionStatus.Active)
+                ////    transaction.Commit();
+                ////    //else
+                ////    //    throw new Exception("Timed out!");
+                ////}
+                ////catch
+                ////{
+                ////    //// When timed out this one is active, failing to rollback
+                ////    //if (transaction.IsActive)
+                ////    //    transaction.Rollback();
+
+                ////    //// this one is inactive, hence no failed rollback
+                ////    //// which should we do? If any at all?
+                ////    //if (session.Transaction.IsActive)
+                ////    //    session.Transaction.Rollback();
+
+                ////    throw;
+                ////}
+                ////finally
+                ////{
+                ////    session.Close();
+                ////}
             }
 
 

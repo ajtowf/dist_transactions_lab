@@ -24,7 +24,7 @@ namespace ApplicationService
                     _ef.Write(Item.Create);
                 else
                     _nh.Write(Item.Create);
-                
+
                 scope.Complete();
             }
         }
