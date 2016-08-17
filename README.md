@@ -10,9 +10,11 @@ Reproduces problem with timed out SQL connections when using DTC. Examples with 
 
 ## Reproduce with NHibernate
 
-Press numpad 1 (causes timeout)
-Press numpad 1 again (causes a second timeout)
-Press numpad 1 again (now we get an exception at session.BeginTransaction())
+ 1. Press numpad 1 (causes timeout)
+ 2. Press numpad 1 again (causes a second timeout)
+ 3. Press numpad 1 again (now we get an exception at session.BeginTransaction())
 
-From this point on all clients that call session.BeginTransaction() will fail, meaning even clients that only want to read data (numpad2).
+From this point on all clients that call session.BeginTransaction() will fail, meaning even clients that only want to read data
+ 4. Press numpad 2 -> Same exception as above.
 
+Why would we want to call BeginTransaction(...) for reads you ask? To specify the IsolationLevel.
