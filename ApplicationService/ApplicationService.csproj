@@ -93,6 +93,18 @@
     <Compile Include="AppService.svc.cs">
       <DependentUpon>AppService.svc</DependentUpon>
     </Compile>
+    <Compile Include="DatabaseContext.cs" />
+    <Compile Include="Migrations\201603091820333_Initial.cs" />
+    <Compile Include="Migrations\201603091820333_Initial.Designer.cs">
+      <DependentUpon>201603091820333_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="PersistentStorage\EntityFramework\AppDbContext.cs" />
+    <Compile Include="PersistentStorage\EntityFramework\EntityFrameworkImpl.cs" />
+    <Compile Include="PersistentStorage\IDbAbstraction.cs" />
+    <Compile Include="PersistentStorage\NHibernate\ItemMap.cs" />
+    <Compile Include="PersistentStorage\NHibernate\NHibernateImpl.cs" />
+    <Compile Include="PersistentStorage\NHibernate\SessionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +121,11 @@
       <Project>{923CA05D-9F48-474F-BF5A-3B683F89DC73}</Project>
       <Name>Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603091820333_Initial.resx">
+      <DependentUpon>201603091820333_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

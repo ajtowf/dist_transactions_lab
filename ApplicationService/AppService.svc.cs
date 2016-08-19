@@ -1,37 +1,52 @@
 ﻿using System.ServiceModel;
 using System.Transactions;
-using Common.PersistentStorage.NHibernate;
 using Common;
 using Common.Entities;
 using System.Collections.Generic;
-using Common.PersistentStorage;
-using Common.PersistentStorage.EntityFramework;
+using IsolationLevel = System.Data.IsolationLevel;
+using System;
+using System.Threading;
+using System.Linq;
 
 namespace ApplicationService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true)]    
     public class AppService : IAppService
     {
-        private readonly IDbAbstraction _nh = new NHibernateImpl();
-        private readonly IDbAbstraction _ef = new EntityFrameworkImpl();
-
         [OperationBehavior(TransactionScopeRequired = true)]
-        public void Write(bool useEntityFramework = true)
+        public void Write(int operation)
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required))
+            using (var context = new DatabaseContext(IsolationLevel.ReadCommitted))
             {
-                if (useEntityFramework)
-                    _ef.Write(Item.Create);
-                else
-                    _nh.Write(Item.Create);
+                context.Session.SaveOrUpdate(Item.Create);
 
+                switch (operation)
+                {
+                    case 1:
+                        throw new Exception();
+                    case 2:
+                        Thread.Sleep(25 * 1000);
+                        break;
+                    default:
+                        break;
+                }
+
+                context.Commit();
                 scope.Complete();
             }
         }
 
-        public IEnumerable<Item> Read(bool useEntityFramework = true)
+        public IEnumerable<Item> Read()
         {
-            return useEntityFramework ? _ef.GetAll() : _nh.GetAll();            
+            IList<Item> items;
+            using (var context = new DatabaseContext(IsolationLevel.ReadCommitted))
+            {
+                items = context.Session.QueryOver<Item>().List().ToList();
+                context.Commit();
+            }
+
+            return items;
         }
     }
 }

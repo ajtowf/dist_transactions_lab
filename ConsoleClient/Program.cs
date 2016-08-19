@@ -2,6 +2,7 @@
 using Common;
 using System.Transactions;
 using System.ServiceModel;
+using System.Linq;
 
 namespace ConsoleClient
 {
@@ -19,19 +20,19 @@ namespace ConsoleClient
                     switch (key.Key)
                     {
                         case ConsoleKey.NumPad1:
-                            Console.WriteLine("Write with NH");
-                            Write(false);
+                            Console.WriteLine("Write.");
+                            Write(0);
                             break;
                         case ConsoleKey.NumPad2:
-                            Console.WriteLine("Read with NH");
-                            Read(false);
+                            Console.WriteLine("Write and throw.");
+                            Write(1);
                             break;
                         case ConsoleKey.NumPad3:
-                            Console.WriteLine("Write with EF");
-                            Write();
+                            Console.WriteLine("Write and sleep.");
+                            Write(2);
                             break;
                         case ConsoleKey.NumPad4:
-                            Console.WriteLine("Read with EF");
+                            Console.WriteLine("Read.");
                             Read();
                             break;                        
                         default:
@@ -50,7 +51,7 @@ namespace ConsoleClient
             }
         }
 
-        private static void Write(bool useEntityFramework = true)
+        private static void Write(int operation)
         {
             using (var scope = new TransactionScope(
                 TransactionScopeOption.Required,
@@ -61,16 +62,17 @@ namespace ConsoleClient
                 }))
             using (var proxy = new AppServiceClient())
             {
-                proxy.Write(useEntityFramework);
+                proxy.Write(operation);                
                 scope.Complete();
             }
         }
 
-        private static void Read(bool useEntityFramework = true)
+        private static void Read()
         {
             using (var proxy = new AppServiceClient())
             {
-                proxy.Read(useEntityFramework);
+                var items = proxy.Read().ToList();
+                Console.WriteLine($"Read {items.Count} items.");
             }
         }
     }

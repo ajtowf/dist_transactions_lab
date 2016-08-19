@@ -6,14 +6,14 @@ namespace Common
 {
     public class AppServiceClient : ClientBase<IAppService>, IAppService
     {
-        public IEnumerable<Item> Read(bool useEntityFramework = true)
+        public IEnumerable<Item> Read()
         {
-            return Channel.Read(useEntityFramework);
+            return Channel.Read();
         }
 
-        public void Write(bool useEntityFramework = true)
+        public void Write(int operation)
         {
-            Channel.Write(useEntityFramework);
+            Channel.Write(operation);
         }        
     }
 }

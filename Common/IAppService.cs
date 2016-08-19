@@ -9,9 +9,9 @@ namespace Common
     {
         [OperationContract]
         [TransactionFlow(TransactionFlowOption.Mandatory)]
-        void Write(bool useEntityFramework = true);
+        void Write(int operation);
 
         [OperationContract]        
-        IEnumerable<Item> Read(bool useEntityFramework = true);
+        IEnumerable<Item> Read();
     }
 }

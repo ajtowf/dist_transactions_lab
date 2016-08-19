@@ -3,7 +3,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 
-namespace Common.PersistentStorage.NHibernate
+namespace ApplicationService.PersistentStorage.NHibernate
 {
     public static class SessionManager
     {
