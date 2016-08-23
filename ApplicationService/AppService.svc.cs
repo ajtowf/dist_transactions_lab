@@ -7,6 +7,8 @@ using IsolationLevel = System.Data.IsolationLevel;
 using System;
 using System.Threading;
 using System.Linq;
+using log4net.Core;
+using log4net;
 
 namespace ApplicationService
 {
@@ -16,7 +18,10 @@ namespace ApplicationService
         [OperationBehavior(TransactionScopeRequired = true)]
         public void Write(int operation)
         {
-            using (var scope = new TransactionScope(TransactionScopeOption.Required))
+            var logger = LogManager.GetLogger(typeof(AppService));
+            logger.Debug("Hej Darko!!");
+
+            //using (var scope = new TransactionScope(TransactionScopeOption.Required))
             using (var context = new DatabaseContext(IsolationLevel.ReadCommitted))
             {
                 context.Session.SaveOrUpdate(Item.Create);
@@ -33,7 +38,7 @@ namespace ApplicationService
                 }
 
                 context.Commit();
-                scope.Complete();
+                //scope.Complete();
             }
         }
 

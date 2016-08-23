@@ -8,7 +8,7 @@ namespace Common
     public interface IAppService
     {
         [OperationContract]
-        [TransactionFlow(TransactionFlowOption.Mandatory)]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
         void Write(int operation);
 
         [OperationContract]        
