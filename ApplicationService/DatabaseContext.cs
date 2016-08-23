@@ -9,7 +9,7 @@ namespace ApplicationService
     {
         private ISession _session;
         private ITransaction _transaction;
-        bool _disposed;
+        private bool _disposed;
 
         public DatabaseContext(IsolationLevel isolationLevel)
         {
@@ -19,10 +19,10 @@ namespace ApplicationService
                 _session.BeginTransaction();
         }
 
-        //~DatabaseContext()
-        //{
-        //    Dispose(false);
-        //}
+        ~DatabaseContext()
+        {
+            Dispose(false);
+        }
 
         public ISession Session
         {
@@ -39,18 +39,13 @@ namespace ApplicationService
 
         public void Dispose()
         {
-            if (_session.Transaction.IsActive && !_transaction.WasCommitted)
-                _transaction.Rollback();
-
-            //_session.Dispose();
-            //Dispose(true);
-            //GC.SuppressFinalize(this);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
-        
+
         private void Dispose(bool disposing)
         {
-            if (_disposed)
-                return;
+            if (_disposed) return;
 
             if (disposing)
             {
@@ -60,9 +55,8 @@ namespace ApplicationService
                 _session.Dispose();
             }
 
-            //_transaction = null;
-            //_session = null;
-
+            _session = null;
+            _transaction = null;
             _disposed = true;
         }
     }
